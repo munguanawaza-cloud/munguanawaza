@@ -1,0 +1,94 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-display: 'Outfit', 'Cairo', system-ui, sans-serif;
+    --font-sans: 'Plus Jakarta Sans', 'Cairo', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  html {
+    background-color: #0A0A0A;
+    color: #ffffff;
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+
+  html[dir="rtl"] {
+    font-family: 'Cairo', 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+
+  html[dir="rtl"] h1,
+  html[dir="rtl"] h2,
+  html[dir="rtl"] h3,
+  html[dir="rtl"] .font-display {
+    font-family: 'Cairo', 'Outfit', system-ui, sans-serif;
+  }
+
+  .font-mono-tabular {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.glass-panel {
+  background: linear-gradient(145deg, rgba(20, 20, 20, 0.88) 0%, rgba(12, 12, 12, 0.78) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+}
+
+.glass-panel:hover {
+  border-color: rgba(212, 175, 55, 0.45);
+}
+
+.gold-pill-btn {
+  background: linear-gradient(135deg, #E5C558 0%, #D4AF37 52%, #B58E24 100%);
+  color: #0A0A0A;
+  box-shadow: 0 0 28px rgba(212, 175, 55, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1), filter 180ms ease;
+}
+
+.gold-pill-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 38px rgba(212, 175, 55, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  filter: brightness(1.05);
+}
+
+.gold-pill-btn:active {
+  transform: translateY(0);
+}
+
+.gold-outline-pill {
+  background: rgba(17, 17, 17, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.12);
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.gold-outline-pill:hover {
+  transform: translateY(-1px);
+  border-color: #D4AF37;
+  background: rgba(212, 175, 55, 0.12);
+  box-shadow: 0 0 28px rgba(212, 175, 55, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

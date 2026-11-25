@@ -1,0 +1,6 @@
+{
+  "name": "MUNGU ANA WEZA",
+  "description": "Global SaaS & Tech Enterprise platform: PIECES PRO / NOVA OS, SOKO MUNGU, MUNGU AI, and custom enterprise software engineering (munguanaweza.com).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

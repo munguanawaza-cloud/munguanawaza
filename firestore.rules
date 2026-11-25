@@ -1,0 +1,233 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny global safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global hardened primitives
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // Verified bootstrapped admin (zero DB read for list queries)
+    function isBootstrappedAdmin() {
+      return isEmailVerified() && request.auth.token.email == 'munguanawaza@gmail.com';
+    }
+
+    // Full admin check (token bootstrap + /admins/{uid} lookup for get/write)
+    function isAdmin() {
+      return isBootstrappedAdmin() || (
+        isEmailVerified() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Validation Blueprint: ChatMessage
+    function isValidChatMessage(data) {
+      return data.keys().hasAll([
+          'channel',
+          'senderUid',
+          'senderName',
+          'senderRole',
+          'message',
+          'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'channel',
+          'senderUid',
+          'senderName',
+          'senderRole',
+          'message',
+          'createdAt'
+        ])
+        && data.channel == 'kolwezi-dispatch'
+        && data.senderUid == request.auth.uid
+        && isValidId(data.senderUid)
+        && data.senderName is string
+        && data.senderName.size() >= 1
+        && data.senderName.size() <= 80
+        && data.senderRole in ['Chauffeur', 'Commerçant', 'Employé', 'Admin']
+        && (data.senderRole != 'Admin' || isAdmin())
+        && data.message is string
+        && data.message.size() >= 1
+        && data.message.size() <= 1000
+        && data.createdAt is timestamp;
+    }
+
+    // Validation Blueprint: DeliveryOrder
+    function isValidOrder(data) {
+      return data.keys().hasAll([
+          'creatorUid',
+          'creatorName',
+          'customer',
+          'details',
+          'status',
+          'acceptedByUid',
+          'acceptedByName',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'creatorUid',
+          'creatorName',
+          'customer',
+          'details',
+          'status',
+          'acceptedByUid',
+          'acceptedByName',
+          'createdAt',
+          'updatedAt'
+        ])
+        && isValidId(data.creatorUid)
+        && data.creatorName is string
+        && data.creatorName.size() >= 1
+        && data.creatorName.size() <= 80
+        && data.customer is string
+        && data.customer.size() >= 2
+        && data.customer.size() <= 120
+        && data.details is string
+        && data.details.size() >= 2
+        && data.details.size() <= 500
+        && data.status in ['pending', 'accepted', 'completed', 'cancelled']
+        && data.acceptedByUid is string
+        && data.acceptedByUid.size() <= 128
+        && data.acceptedByName is string
+        && data.acceptedByName.size() <= 80
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Health check document for startup server connectivity test
+    match /test/{docId} {
+      allow get: if docId == 'connection';
+      allow list, create, update, delete: if false;
+    }
+
+    // Administrator grants (read by owner or bootstrapped admin)
+    match /admins/{uid} {
+      allow get: if isSignedIn() && isValidId(uid) && (isOwner(uid) || isBootstrappedAdmin());
+      allow list: if isBootstrappedAdmin();
+      allow create, update, delete: if false;
+    }
+
+    // Internal Dispatch Chat (kolwezi_chat)
+    match /kolwezi_chat/{messageId} {
+      allow get: if isEmailVerified()
+        && isValidId(messageId)
+        && existing().channel == 'kolwezi-dispatch';
+      allow list: if isEmailVerified()
+        && existing().channel == 'kolwezi-dispatch';
+      allow create: if isEmailVerified()
+        && isValidId(messageId)
+        && isValidChatMessage(incoming())
+        && incoming().createdAt == request.time;
+      allow update: if false;
+      allow delete: if isAdmin() && isValidId(messageId);
+    }
+
+    // Delivery Orders (orders)
+    match /orders/{orderId} {
+      allow get: if isEmailVerified()
+        && isValidId(orderId)
+        && (
+          existing().status == 'pending'
+          || existing().creatorUid == request.auth.uid
+          || existing().acceptedByUid == request.auth.uid
+          || isAdmin()
+        );
+
+      allow list: if isEmailVerified()
+        && (
+          existing().status == 'pending'
+          || existing().creatorUid == request.auth.uid
+          || existing().acceptedByUid == request.auth.uid
+          || isBootstrappedAdmin()
+        );
+
+      allow create: if isEmailVerified()
+        && isValidId(orderId)
+        && isValidOrder(incoming())
+        && incoming().creatorUid == request.auth.uid
+        && incoming().status == 'pending'
+        && incoming().acceptedByUid == ''
+        && incoming().acceptedByName == ''
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      allow update: if isEmailVerified()
+        && isValidId(orderId)
+        && isValidOrder(incoming())
+        && incoming().creatorUid == existing().creatorUid
+        && incoming().creatorName == existing().creatorName
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          isAdmin()
+          || (
+            existing().status != 'completed'
+            && existing().status != 'cancelled'
+            && (
+              (
+                existing().status == 'pending'
+                && incoming().status == 'accepted'
+                && incoming().acceptedByUid == request.auth.uid
+                && isValidId(incoming().acceptedByUid)
+                && incoming().acceptedByName.size() >= 1
+                && incoming().diff(existing()).affectedKeys().hasOnly([
+                  'status',
+                  'acceptedByUid',
+                  'acceptedByName',
+                  'updatedAt'
+                ])
+              )
+              || (
+                existing().status == 'accepted'
+                && (
+                  existing().acceptedByUid == request.auth.uid
+                  || existing().creatorUid == request.auth.uid
+                )
+                && incoming().status == 'completed'
+                && incoming().diff(existing()).affectedKeys().hasOnly([
+                  'status',
+                  'updatedAt'
+                ])
+              )
+              || (
+                existing().status == 'pending'
+                && existing().creatorUid == request.auth.uid
+                && incoming().status == 'cancelled'
+                && incoming().diff(existing()).affectedKeys().hasOnly([
+                  'status',
+                  'updatedAt'
+                ])
+              )
+            )
+          )
+        );
+
+      allow delete: if isAdmin() && isValidId(orderId);
+    }
+  }
+}
