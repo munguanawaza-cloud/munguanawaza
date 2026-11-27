@@ -288,6 +288,156 @@ async function startServer() {
     res.json({ mapsApiKey });
   });
 
+  app.get('/api/og-image.svg', (req: Request, res: Response) => {
+    const escapeXml = (str: string) =>
+      str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+    const wrapLines = (text: string, maxChars: number, maxLines: number): string[] => {
+      const words = text.trim().split(/\s+/).filter(Boolean);
+      const lines: string[] = [];
+      let current = '';
+      for (const word of words) {
+        if ((current ? `${current} ${word}` : word).length <= maxChars) {
+          current = current ? `${current} ${word}` : word;
+        } else {
+          if (current) lines.push(current);
+          current = word.slice(0, maxChars);
+          if (lines.length >= maxLines) break;
+        }
+      }
+      if (current && lines.length < maxLines) lines.push(current);
+      if (lines.length === maxLines && words.join(' ').length > lines.join(' ').length) {
+        lines[maxLines - 1] = `${lines[maxLines - 1].slice(0, Math.max(0, maxChars - 1))}…`;
+      }
+      return lines;
+    };
+
+    const rawTitle =
+      typeof req.query.title === 'string' && req.query.title.trim()
+        ? req.query.title.trim().slice(0, 90)
+        : 'MUNGU ANA WEZA — Infrastructure Intelligente & Solutions SaaS';
+    const rawSubtitle =
+      typeof req.query.subtitle === 'string' && req.query.subtitle.trim()
+        ? req.query.subtitle.trim().slice(0, 160)
+        : 'PIECES PRO / NOVA OS · SOKO MUNGU · MUNGU AI · munguanaweza.com';
+    const rawBadge =
+      typeof req.query.badge === 'string' && req.query.badge.trim()
+        ? req.query.badge.trim().slice(0, 48)
+        : 'GLOBAL SAAS & TECH ENTERPRISE';
+    const rawLang =
+      typeof req.query.lang === 'string' && VALID_LANGS.has(req.query.lang)
+        ? req.query.lang
+        : 'fr';
+    const isRtl = rawLang === 'ar';
+
+    const titleLines = wrapLines(rawTitle, 32, 3);
+    const subtitleLines = wrapLines(rawSubtitle, 58, 2);
+    const anchor = isRtl ? 'end' : 'start';
+    const textX = isRtl ? 1120 : 80;
+
+    const titleSvg = titleLines
+      .map(
+        (line, idx) =>
+          `<text x="${textX}" y="${255 + idx * 62}" fill="#FFFFFF" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="48" font-weight="700" text-anchor="${anchor}" direction="${isRtl ? 'rtl' : 'ltr'}">${escapeXml(line)}</text>`
+      )
+      .join('');
+
+    const subtitleYStart = 255 + titleLines.length * 62 + 24;
+    const subtitleSvg = subtitleLines
+      .map(
+        (line, idx) =>
+          `<text x="${textX}" y="${subtitleYStart + idx * 34}" fill="#D4D4D8" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="24" font-weight="400" text-anchor="${anchor}" direction="${isRtl ? 'rtl' : 'ltr'}">${escapeXml(line)}</text>`
+      )
+      .join('');
+
+    const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A0A0A" />
+      <stop offset="55%" stop-color="#111111" />
+      <stop offset="100%" stop-color="#1A1508" />
+    </linearGradient>
+    <radialGradient id="goldGlow" cx="80%" cy="20%" r="55%">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#D4AF37" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="goldBorder" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.9" />
+      <stop offset="50%" stop-color="#F5D77F" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#D4AF37" stop-opacity="0.25" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bgGrad)" />
+  <rect width="1200" height="630" fill="url(#goldGlow)" />
+  <rect x="28" y="28" width="1144" height="574" rx="28" fill="none" stroke="url(#goldBorder)" stroke-width="1.5" />
+  <g transform="translate(80, 76)">
+    <rect width="48" height="48" rx="12" fill="#141414" stroke="#D4AF37" stroke-width="2" />
+    <path d="M12 34V14L24 26L36 14V34" fill="none" stroke="#D4AF37" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="64" y="32" fill="#FFFFFF" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="700" letter-spacing="1.5">MUNGU ANA <tspan fill="#D4AF37">WEZA</tspan></text>
+  </g>
+  <rect x="780" y="80" width="340" height="40" rx="20" fill="#D4AF37" fill-opacity="0.12" stroke="#D4AF37" stroke-opacity="0.45" />
+  <text x="950" y="106" fill="#D4AF37" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14" font-weight="700" text-anchor="middle" letter-spacing="1.4">${escapeXml(rawBadge.toUpperCase())}</text>
+  ${titleSvg}
+  ${subtitleSvg}
+  <line x1="80" y1="534" x2="1120" y2="534" stroke="#D4AF37" stroke-opacity="0.25" stroke-width="1" />
+  <text x="80" y="568" fill="#D4AF37" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="600">https://munguanaweza.com</text>
+  <text x="1120" y="568" fill="#A1A1AA" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="16" text-anchor="end">PIECES PRO · SOKO MUNGU · MUNGU AI · MUANS GO</text>
+</svg>`;
+
+    res.setHeader('Content-Type', 'image/svg+xml; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.send(svg);
+  });
+
+  app.get('/api/meta-tags', (req: Request, res: Response) => {
+    const rawBaseUrl = (process.env.APP_URL || 'https://munguanaweza.com').trim().replace(/\/+$/, '');
+    const title =
+      typeof req.query.title === 'string' && req.query.title.trim()
+        ? req.query.title.trim().slice(0, 120)
+        : 'MUNGU ANA WEZA — Infrastructure Intelligente & Solutions SaaS';
+    const description =
+      typeof req.query.description === 'string' && req.query.description.trim()
+        ? req.query.description.trim().slice(0, 260)
+        : 'PIECES PRO / NOVA OS, SOKO MUNGU, MUNGU AI, et ingénierie logicielle sur mesure sur munguanaweza.com.';
+    const lang =
+      typeof req.query.lang === 'string' && VALID_LANGS.has(req.query.lang)
+        ? req.query.lang
+        : 'fr';
+    const pathSuffix =
+      typeof req.query.path === 'string' && req.query.path.startsWith('/')
+        ? req.query.path.slice(0, 120)
+        : '/';
+    const canonicalUrl = `${rawBaseUrl}${pathSuffix}`;
+    const ogImageUrl = `${rawBaseUrl}/api/og-image.svg?title=${encodeURIComponent(title)}&subtitle=${encodeURIComponent(description)}&lang=${encodeURIComponent(lang)}`;
+
+    res.json({
+      ok: true,
+      canonicalUrl,
+      openGraph: {
+        'og:type': 'website',
+        'og:site_name': 'MUNGU ANA WEZA',
+        'og:url': canonicalUrl,
+        'og:title': title,
+        'og:description': description,
+        'og:image': ogImageUrl,
+        'og:locale': lang === 'ar' ? 'ar_AR' : lang === 'en' ? 'en_US' : 'fr_FR',
+      },
+      twitter: {
+        'twitter:card': 'summary_large_image',
+        'twitter:site': '@munguanaweza',
+        'twitter:title': title,
+        'twitter:description': description,
+        'twitter:image': ogImageUrl,
+      },
+    });
+  });
+
   app.post('/api/quotes', async (req: Request, res: Response) => {
     const body = req.body as Record<string, unknown> | null;
     if (!body || typeof body !== 'object') {

@@ -11,13 +11,37 @@ import { MunguAISection } from './components/MunguAISection';
 import { Navbar } from './components/Navbar';
 import { PiecesProSection } from './components/PiecesProSection';
 import { ScrollProgressBar } from './components/ScrollProgressBar';
+import { SocialMetaGeneratorSection } from './components/SocialMetaGeneratorSection';
 import { SokoMunguSection } from './components/SokoMunguSection';
 import { TarifsSection } from './components/TarifsSection';
 import { TrustSection } from './components/TrustSection';
 import { TRANSLATIONS, type Language, type PlanInquiryId } from './i18n/translations';
+import {
+  applyDocumentMetaTags,
+  buildDefaultSocialMeta,
+  getRuntimeOrigin,
+  isValidSocialSection,
+  type SocialSectionId,
+} from './utils/socialMeta';
+
+function getInitialLangFromUrl(): Language {
+  if (typeof window === 'undefined') return 'fr';
+  const param = new URLSearchParams(window.location.search).get('lang');
+  if (param === 'fr' || param === 'en' || param === 'ar') return param;
+  return 'fr';
+}
+
+function getInitialSectionFromUrl(): SocialSectionId {
+  if (typeof window === 'undefined') return 'home';
+  const param = new URLSearchParams(window.location.search).get('section');
+  return isValidSocialSection(param) ? param : 'home';
+}
 
 export default function App() {
-  const [lang, setLang] = useState<Language>('fr');
+  const [lang, setLang] = useState<Language>(getInitialLangFromUrl);
+  const [activeSocialSection, setActiveSocialSection] = useState<SocialSectionId>(
+    getInitialSectionFromUrl
+  );
   const [selectedPlan, setSelectedPlan] = useState<PlanInquiryId>('trial-7d');
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [gmpQuotaExceeded, setGmpQuotaExceeded] = useState(false);
@@ -35,12 +59,9 @@ export default function App() {
     const html = document.documentElement;
     html.lang = lang;
     html.dir = isRtl ? 'rtl' : 'ltr';
-    document.title = t.meta.pageTitle;
-    const descMeta = document.querySelector('meta[name="description"]');
-    if (descMeta) {
-      descMeta.setAttribute('content', t.meta.pageDescription);
-    }
-  }, [lang, isRtl, t.meta.pageTitle, t.meta.pageDescription]);
+    const metaConfig = buildDefaultSocialMeta(lang, activeSocialSection, getRuntimeOrigin());
+    applyDocumentMetaTags(metaConfig);
+  }, [lang, isRtl, activeSocialSection]);
 
   const scrollToContactWithPlan = (planId: PlanInquiryId) => {
     setSelectedPlan(planId);
@@ -128,6 +149,13 @@ export default function App() {
           t={t.trust}
           isRtl={isRtl}
           onStartTrial={() => scrollToContactWithPlan('trial-7d')}
+        />
+        <SocialMetaGeneratorSection
+          t={t.socialMeta}
+          lang={lang}
+          isRtl={isRtl}
+          activeSection={activeSocialSection}
+          onSectionChange={setActiveSocialSection}
         />
         <ContactSection
           t={t.contact}

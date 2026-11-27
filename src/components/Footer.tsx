@@ -47,6 +47,9 @@ export function Footer({ lang, onChangeLang, t }: FooterProps) {
             <a href="#tarifs" className="hover:text-[#D4AF37] transition-colors">
               {t.nav.tarifs}
             </a>
+            <a href="#social-seo" className="hover:text-[#D4AF37] transition-colors">
+              {t.footer.socialMetaLink}
+            </a>
             <a href="#contact" className="hover:text-[#D4AF37] transition-colors">
               {t.nav.contact}
             </a>

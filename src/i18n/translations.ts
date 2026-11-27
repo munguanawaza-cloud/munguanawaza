@@ -362,6 +362,56 @@ export interface TranslationContent {
     tagline: string;
     location: string;
     rights: string;
+    socialMetaLink: string;
+  };
+  socialMeta: {
+    kicker: string;
+    title: string;
+    subtitle: string;
+    presetLabel: string;
+    presets: {
+      home: string;
+      'pieces-pro': string;
+      'soko-mungu': string;
+      'mungu-ai': string;
+      operations: string;
+      tarifs: string;
+      contact: string;
+    };
+    titleLabel: string;
+    titleLengthIdeal: string;
+    descriptionLabel: string;
+    descriptionLengthIdeal: string;
+    urlLabel: string;
+    imageSourceLabel: string;
+    imageSources: {
+      'dynamic-card': string;
+      hero: string;
+      'mungu-ai': string;
+      engineering: string;
+      custom: string;
+    };
+    customImagePlaceholder: string;
+    twitterCardLabel: string;
+    twitterCardLarge: string;
+    twitterCardSummary: string;
+    twitterHandleLabel: string;
+    applyLiveBtn: string;
+    appliedLiveBadge: string;
+    copyHtmlBtn: string;
+    copiedHtmlBtn: string;
+    copyShareLinkBtn: string;
+    copiedShareLinkBtn: string;
+    openOgImageBtn: string;
+    resetBtn: string;
+    previewTitle: string;
+    platformTabs: {
+      twitter: string;
+      opengraph: string;
+      whatsapp: string;
+    };
+    codeTitle: string;
+    charCountSuffix: string;
   };
   assistant: {
     launcherLabel: string;
@@ -918,6 +968,57 @@ export const TRANSLATIONS: Record<Language, TranslationContent> = {
       tagline: 'Infrastructure intelligente de gestion, d’IA décisionnelle et de commerce digital.',
       location: 'Siège social : Kolwezi, RDC · munguanaweza.com',
       rights: 'MUNGU ANA WEZA. Tous droits réservés.',
+      socialMetaLink: 'Aperçus SEO & Social',
+    },
+    socialMeta: {
+      kicker: 'Visibilité Sociale & SEO · OpenGraph + X',
+      title: 'Générateur de Balises OpenGraph & Twitter',
+      subtitle:
+        'Configurez, prévisualisez et appliquez dynamiquement vos cartes de partage social (X/Twitter, LinkedIn, Facebook, WhatsApp) pour chaque page de munguanaweza.com.',
+      presetLabel: 'Section cible',
+      presets: {
+        home: 'Accueil (munguanaweza.com)',
+        'pieces-pro': 'PIECES PRO / NOVA OS',
+        'soko-mungu': 'SOKO MUNGU',
+        'mungu-ai': 'MUNGU AI',
+        operations: 'MUANS & MUANS GO',
+        tarifs: 'Tarifs & Plans',
+        contact: 'Contact & Devis',
+      },
+      titleLabel: 'Titre Social (og:title / twitter:title)',
+      titleLengthIdeal: 'Idéal : 30–60 caractères',
+      descriptionLabel: 'Description (og:description / twitter:description)',
+      descriptionLengthIdeal: 'Idéal : 120–160 caractères',
+      urlLabel: 'URL canonique de partage',
+      imageSourceLabel: 'Visuel de la carte (1200×630)',
+      imageSources: {
+        'dynamic-card': 'Carte OG Dynamique (Or & Noir)',
+        hero: 'Architecture SaaS (Hero)',
+        'mungu-ai': 'Moteur MUNGU AI',
+        engineering: 'Studio Ingénierie',
+        custom: 'URL personnalisée (HTTPS)',
+      },
+      customImagePlaceholder: 'https://munguanaweza.com/images/social-card.jpg',
+      twitterCardLabel: 'Format Twitter / X',
+      twitterCardLarge: 'Grande Image (summary_large_image)',
+      twitterCardSummary: 'Compact (summary)',
+      twitterHandleLabel: 'Compte X (@handle)',
+      applyLiveBtn: 'Appliquer à cette page',
+      appliedLiveBadge: 'Balises actives dans <head>',
+      copyHtmlBtn: 'Copier les balises HTML',
+      copiedHtmlBtn: 'Balises HTML copiées',
+      copyShareLinkBtn: 'Copier le lien partageable',
+      copiedShareLinkBtn: 'Lien de partage copié',
+      openOgImageBtn: 'Ouvrir l’image OG',
+      resetBtn: 'Réinitialiser',
+      previewTitle: 'Aperçu en direct sur les réseaux',
+      platformTabs: {
+        twitter: 'X / Twitter',
+        opengraph: 'LinkedIn / Facebook',
+        whatsapp: 'WhatsApp',
+      },
+      codeTitle: 'Code HTML généré (<head> + JSON-LD)',
+      charCountSuffix: 'car.',
     },
     assistant: {
       launcherLabel: 'Concierge IA',
@@ -1477,6 +1578,57 @@ export const TRANSLATIONS: Record<Language, TranslationContent> = {
       tagline: 'Intelligent cloud business infrastructure, decision AI, and custom software engineering.',
       location: 'Headquarters: Kolwezi, DRC · munguanaweza.com',
       rights: 'MUNGU ANA WEZA. All rights reserved.',
+      socialMetaLink: 'SEO & Social Cards',
+    },
+    socialMeta: {
+      kicker: 'Social Growth & SEO · OpenGraph + X',
+      title: 'OpenGraph & Twitter Meta Tag Generator',
+      subtitle:
+        'Design, preview, and dynamically apply rich social share cards (X/Twitter, LinkedIn, Facebook, WhatsApp) for every page of munguanaweza.com.',
+      presetLabel: 'Target Page / Section',
+      presets: {
+        home: 'Home (munguanaweza.com)',
+        'pieces-pro': 'PIECES PRO / NOVA OS',
+        'soko-mungu': 'SOKO MUNGU',
+        'mungu-ai': 'MUNGU AI',
+        operations: 'MUANS & MUANS GO',
+        tarifs: 'Pricing Plans',
+        contact: 'Contact & Quotes',
+      },
+      titleLabel: 'Social Title (og:title / twitter:title)',
+      titleLengthIdeal: 'Ideal: 30–60 chars',
+      descriptionLabel: 'Social Description (og:description / twitter:description)',
+      descriptionLengthIdeal: 'Ideal: 120–160 chars',
+      urlLabel: 'Canonical Share URL',
+      imageSourceLabel: 'Preview Card Image (1200×630)',
+      imageSources: {
+        'dynamic-card': 'Dynamic OG Card (Black & Gold)',
+        hero: 'SaaS Architecture (Hero)',
+        'mungu-ai': 'MUNGU AI Engine',
+        engineering: 'Engineering Studio',
+        custom: 'Custom Image URL (HTTPS)',
+      },
+      customImagePlaceholder: 'https://munguanaweza.com/images/social-card.jpg',
+      twitterCardLabel: 'Twitter / X Card Format',
+      twitterCardLarge: 'Large Image (summary_large_image)',
+      twitterCardSummary: 'Compact (summary)',
+      twitterHandleLabel: 'X Handle (@site)',
+      applyLiveBtn: 'Apply to Live Page',
+      appliedLiveBadge: 'Active in document <head>',
+      copyHtmlBtn: 'Copy HTML Meta Tags',
+      copiedHtmlBtn: 'HTML Meta Tags Copied',
+      copyShareLinkBtn: 'Copy Shareable URL',
+      copiedShareLinkBtn: 'Shareable URL Copied',
+      openOgImageBtn: 'Open OG Image',
+      resetBtn: 'Reset',
+      previewTitle: 'Live Social Card Preview',
+      platformTabs: {
+        twitter: 'X / Twitter',
+        opengraph: 'LinkedIn / Facebook',
+        whatsapp: 'WhatsApp',
+      },
+      codeTitle: 'Generated HTML Tags (<head> + JSON-LD)',
+      charCountSuffix: 'chars',
     },
     assistant: {
       launcherLabel: 'AI Concierge',
@@ -2036,6 +2188,57 @@ export const TRANSLATIONS: Record<Language, TranslationContent> = {
       tagline: 'بنية تحتية ذكية لإدارة الأعمال والذكاء الاصطناعي والتجارة الرقمية.',
       location: 'المقر الرئيسي: كولويزي، الكونغو الديمقراطية · munguanaweza.com',
       rights: 'MUNGU ANA WEZA. جميع الحقوق محفوظة.',
+      socialMetaLink: 'مولد بطاقات SEO والمشاركة',
+    },
+    socialMeta: {
+      kicker: 'الظهور الاجتماعي و SEO · OpenGraph + X',
+      title: 'مولد وسوم OpenGraph و Twitter للمعاينة الديناميكية',
+      subtitle:
+        'أنشئ وعاين وطبّق ديناميكياً بطاقات المشاركة الاجتماعية الاحترافية (X/Twitter، لينكدإن، فيسبوك، واتساب) لكل أقسام موقع munguanaweza.com.',
+      presetLabel: 'القسم أو الصفحة المستهدفة',
+      presets: {
+        home: 'الرئيسية (munguanaweza.com)',
+        'pieces-pro': 'PIECES PRO / NOVA OS',
+        'soko-mungu': 'SOKO MUNGU',
+        'mungu-ai': 'MUNGU AI',
+        operations: 'عمليات MUANS GO',
+        tarifs: 'الباقات والأسعار',
+        contact: 'التواصل وعروض الأسعار',
+      },
+      titleLabel: 'العنوان الاجتماعي (og:title / twitter:title)',
+      titleLengthIdeal: 'المثالي: 30–60 حرفاً',
+      descriptionLabel: 'الوصف (og:description / twitter:description)',
+      descriptionLengthIdeal: 'المثالي: 120–160 حرفاً',
+      urlLabel: 'الرابط الأساسي للمشاركة (Canonical URL)',
+      imageSourceLabel: 'صورة بطاقة المعاينة (1200×630)',
+      imageSources: {
+        'dynamic-card': 'بطاقة OG ديناميكية (ذهبي وأسود)',
+        hero: 'البنية التقنية (Hero)',
+        'mungu-ai': 'محرك MUNGU AI',
+        engineering: 'استوديو الهندسة',
+        custom: 'رابط صورة مخصص (HTTPS)',
+      },
+      customImagePlaceholder: 'https://munguanaweza.com/images/social-card.jpg',
+      twitterCardLabel: 'تنسيق بطاقة Twitter / X',
+      twitterCardLarge: 'صورة كبيرة (summary_large_image)',
+      twitterCardSummary: 'بطاقة مدمجة (summary)',
+      twitterHandleLabel: 'حساب X (@handle)',
+      applyLiveBtn: 'تطبيق على الصفحة الحالية',
+      appliedLiveBadge: 'الوسوم مفعلة في <head>',
+      copyHtmlBtn: 'نسخ وسوم HTML',
+      copiedHtmlBtn: 'تم نسخ وسوم HTML',
+      copyShareLinkBtn: 'نسخ رابط المشاركة',
+      copiedShareLinkBtn: 'تم نسخ رابط المشاركة',
+      openOgImageBtn: 'فتح صورة البطاقة',
+      resetBtn: 'إعادة ضبط',
+      previewTitle: 'معاينة فورية لبطاقة المشاركة',
+      platformTabs: {
+        twitter: 'X / Twitter',
+        opengraph: 'LinkedIn / Facebook',
+        whatsapp: 'واتساب',
+      },
+      codeTitle: 'كود HTML المولد (<head> + JSON-LD)',
+      charCountSuffix: 'حرف',
     },
     assistant: {
       launcherLabel: 'المستشار الذكي',
