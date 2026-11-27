@@ -10,6 +10,7 @@ import { MuansOperationsSection } from './components/MuansOperationsSection';
 import { MunguAISection } from './components/MunguAISection';
 import { Navbar } from './components/Navbar';
 import { PiecesProSection } from './components/PiecesProSection';
+import { OfflineStatusBanner } from './components/PWAControls';
 import { ScrollProgressBar } from './components/ScrollProgressBar';
 import { SocialMetaGeneratorSection } from './components/SocialMetaGeneratorSection';
 import { SokoMunguSection } from './components/SokoMunguSection';
@@ -92,7 +93,7 @@ export default function App() {
         </div>
       )}
       <ScrollProgressBar isRtl={isRtl} />
-      <Navbar lang={lang} onChangeLang={setLang} t={t.nav} a11y={t.a11y} />
+      <Navbar lang={lang} onChangeLang={setLang} t={t.nav} a11y={t.a11y} pwa={t.pwa} />
       <main id="main-content">
         <HeroSection
           t={t.hero}
@@ -166,6 +167,7 @@ export default function App() {
         />
       </main>
       <Footer lang={lang} onChangeLang={setLang} t={t} />
+      <OfflineStatusBanner t={t.pwa} />
       <AIAssistant
         t={t.assistant}
         lang={lang}

@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { Check, ChevronDown, Globe, Menu, X } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { Language, TranslationContent } from '../i18n/translations';
+import { PWAInstallButton } from './PWAControls';
 
 interface NavbarProps {
   lang: Language;
   onChangeLang: (lang: Language) => void;
   t: TranslationContent['nav'];
   a11y: TranslationContent['a11y'];
+  pwa: TranslationContent['pwa'];
 }
 
 const LANGUAGES: { code: Language; label: string; nativeName: string }[] = [
@@ -16,7 +18,7 @@ const LANGUAGES: { code: Language; label: string; nativeName: string }[] = [
   { code: 'ar', label: 'AR', nativeName: 'العربية' },
 ];
 
-export function Navbar({ lang, onChangeLang, t, a11y }: NavbarProps) {
+export function Navbar({ lang, onChangeLang, t, a11y, pwa }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const langMenuRef = useRef<HTMLDivElement | null>(null);
@@ -129,8 +131,9 @@ export function Navbar({ lang, onChangeLang, t, a11y }: NavbarProps) {
           ))}
         </nav>
 
-        {/* Zone 3: Language Switcher Dropdown + Mobile Menu Trigger */}
+        {/* Zone 3: PWA Install Button + Language Switcher Dropdown + Mobile Menu Trigger */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <PWAInstallButton t={pwa} />
           <div ref={langMenuRef} className="relative">
             <button
               type="button"

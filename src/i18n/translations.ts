@@ -413,6 +413,18 @@ export interface TranslationContent {
     codeTitle: string;
     charCountSuffix: string;
   };
+  pwa: {
+    installBtn: string;
+    installIosBtn: string;
+    iosModalTitle: string;
+    iosStep1: string;
+    iosStep2: string;
+    closeBtn: string;
+    offlineBannerTitle: string;
+    offlineBannerSubtitle: string;
+    offlineReadyToast: string;
+    onlineRestoredToast: string;
+  };
   assistant: {
     launcherLabel: string;
     panelTitle: string;
@@ -1019,6 +1031,18 @@ export const TRANSLATIONS: Record<Language, TranslationContent> = {
       },
       codeTitle: 'Code HTML généré (<head> + JSON-LD)',
       charCountSuffix: 'car.',
+    },
+    pwa: {
+      installBtn: 'Installer l’app',
+      installIosBtn: 'Installer sur iOS',
+      iosModalTitle: 'Installer MUNGU ANA WEZA sur iPhone / iPad',
+      iosStep1: '1. Appuyez sur le bouton Partager dans la barre Safari.',
+      iosStep2: '2. Faites défiler vers le bas puis touchez « Sur l’écran d’accueil ».',
+      closeBtn: 'Fermer',
+      offlineBannerTitle: 'Mode hors ligne actif — Contenu principal accessible',
+      offlineBannerSubtitle: 'Kolwezi · Données locales en cache prêtes jusqu’au retour du réseau.',
+      offlineReadyToast: 'Application prête pour l’accès hors ligne (Kolwezi)',
+      onlineRestoredToast: 'Connexion rétablie — Synchronisation active',
     },
     assistant: {
       launcherLabel: 'Concierge IA',
@@ -1630,6 +1654,18 @@ export const TRANSLATIONS: Record<Language, TranslationContent> = {
       codeTitle: 'Generated HTML Tags (<head> + JSON-LD)',
       charCountSuffix: 'chars',
     },
+    pwa: {
+      installBtn: 'Install App',
+      installIosBtn: 'Install on iOS',
+      iosModalTitle: 'Install MUNGU ANA WEZA on iPhone / iPad',
+      iosStep1: '1. Tap the Share button in the Safari toolbar.',
+      iosStep2: '2. Scroll down and tap "Add to Home Screen".',
+      closeBtn: 'Close',
+      offlineBannerTitle: 'Offline Mode Active — Core content available',
+      offlineBannerSubtitle: 'Kolwezi resilience · Serving cached resources until network returns.',
+      offlineReadyToast: 'App ready for offline access (Kolwezi)',
+      onlineRestoredToast: 'Connection restored — Live sync active',
+    },
     assistant: {
       launcherLabel: 'AI Concierge',
       panelTitle: 'MUNGU ANA WEZA Concierge',
@@ -2239,6 +2275,18 @@ export const TRANSLATIONS: Record<Language, TranslationContent> = {
       },
       codeTitle: 'كود HTML المولد (<head> + JSON-LD)',
       charCountSuffix: 'حرف',
+    },
+    pwa: {
+      installBtn: 'تثبيت التطبيق',
+      installIosBtn: 'تثبيت على iOS',
+      iosModalTitle: 'تثبيت MUNGU ANA WEZA على iPhone / iPad',
+      iosStep1: '1. اضغط على زر المشاركة (Share) في شريط متصفح Safari.',
+      iosStep2: '2. مرّر للأسفل واختر "إضافة إلى الشاشة الرئيسية" (Add to Home Screen).',
+      closeBtn: 'إغلاق',
+      offlineBannerTitle: 'وضع عدم الاتصال مفعل — المحتوى الأساسي متاح',
+      offlineBannerSubtitle: 'مرونة شبكة كولويزي · يتم عرض البيانات المخزنة مؤقتاً حتى عودة الاتصال.',
+      offlineReadyToast: 'التطبيق جاهز للعمل دون إنترنت (كولويزي)',
+      onlineRestoredToast: 'تمت استعادة الاتصال — المزامنة المباشرة نشطة',
     },
     assistant: {
       launcherLabel: 'المستشار الذكي',

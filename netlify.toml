@@ -1,0 +1,13 @@
+# Netlify configuration for MUNGU ANA WEZA (React + Vite)
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Single-Page Application fallback routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
